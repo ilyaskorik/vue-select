@@ -1,7 +1,17 @@
 <style>
+  /* Dropdown Default Transition */
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity .15s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  }
+  .fade-enter,
+  .fade-leave-to {
+    opacity: 0;
+  }
+
+  /* theme independent styles (override if need) */
   .v-select {
     position: relative;
-    font-family: sans-serif;
   }
   .v-select,
   .v-select * {
@@ -9,21 +19,44 @@
     -moz-box-sizing: border-box;
     box-sizing: border-box;
   }
-  /* Open Indicator */
   .v-select .open-indicator {
+    cursor: pointer;
+    pointer-events: all;
+  }
+  .v-select.searchable .dropdown-toggle {
+    cursor: text;
+  }
+  .v-select.unsearchable .dropdown-toggle {
+    cursor: pointer;
+  }
+  .v-select .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    overflow-y: scroll;
+  }
+  .v-select li:hover {
+    cursor: pointer;
+  }
+
+  /* default theme */
+  .v-select.theme-default {
+    font-family: sans-serif;
+  }
+  /* Open Indicator */
+  .v-select.theme-default .open-indicator {
     position: absolute;
     bottom: 6px;
     right: 10px;
     display: inline-block;
-    cursor: pointer;
-    pointer-events: all;
     transition: all 150ms cubic-bezier(1.000, -0.115, 0.975, 0.855);
     transition-timing-function: cubic-bezier(1.000, -0.115, 0.975, 0.855);
     opacity: 1;
     transition: opacity .1s;
     height: 20px; width: 10px;
   }
-  .v-select .open-indicator:before {
+  .v-select.theme-default .open-indicator:before {
     border-color: rgba(60, 60, 60, .5);
     border-style: solid;
     border-width: 3px 3px 0 0;
@@ -38,17 +71,17 @@
     box-sizing: inherit;
   }
   /* Open Indicator States */
-  .v-select.open .open-indicator:before {
+  .v-select.theme-default.open .open-indicator:before {
     transform: rotate(315deg);
   }
-  .v-select.loading .open-indicator {
+  .v-select.theme-default.loading .open-indicator {
     opacity: 0;
   }
-  .v-select.open .open-indicator {
+  .v-select.theme-default.open .open-indicator {
     bottom: 1px;
   }
   /* Dropdown Toggle */
-  .v-select .dropdown-toggle {
+  .v-select.theme-default .dropdown-toggle {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -60,7 +93,7 @@
     white-space: normal;
     transition: border-radius .25s;
   }
-  .v-select .dropdown-toggle:after {
+  .v-select.theme-default .dropdown-toggle:after {
     visibility: hidden;
     display: block;
     font-size: 0;
@@ -69,29 +102,18 @@
     height: 0;
   }
   /* Dropdown Toggle States */
-  .v-select.searchable .dropdown-toggle {
-    cursor: text;
-  }
-  .v-select.unsearchable .dropdown-toggle {
-    cursor: pointer;
-  }
-  .v-select.open .dropdown-toggle {
+  .v-select.theme-default.open .dropdown-toggle {
     border-bottom-color: transparent;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
   /* Dropdown Menu */
-  .v-select .dropdown-menu {
+  .v-select.theme-default .dropdown-menu {
     display:block;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    z-index: 1000;
     min-width: 160px;
     padding: 5px 0;
     margin: 0;
     width: 100%;
-    overflow-y: scroll;
     border: 1px solid rgba(0, 0, 0, .26);
     box-shadow: 0px 3px 6px 0px rgba(0,0,0,.15);
     border-top: none;
@@ -100,11 +122,11 @@
     list-style: none;
     background: #fff;
   }
-  .v-select .no-options {
+  .v-select.theme-default .no-options {
     text-align: center;
   }
   /* Selected Tags */
-  .v-select .selected-tag {
+  .v-select.theme-default .selected-tag {
     color: #333;
     background-color: #f0f0f0;
     border: 1px solid #ccc;
@@ -115,19 +137,19 @@
     float: left;
     line-height: 24px;
   }
-  .v-select.single .selected-tag {
+  .v-select.theme-default.single .selected-tag {
     background-color: transparent;
     border-color: transparent;
   }
-  .v-select.single.open .selected-tag {
+  .v-select.theme-default.single.open .selected-tag {
     position: absolute;
     opacity: .5;
   }
-  .v-select.single.open.searching .selected-tag,
-  .v-select.single.loading .selected-tag {
+  .v-select.theme-default.single.open.searching .selected-tag,
+  .v-select.theme-default.single.loading .selected-tag {
     display: none;
   }
-  .v-select .selected-tag .close {
+  .v-select.theme-default .selected-tag .close {
     float: none;
     margin-right: 0;
     font-size: 20px;
@@ -143,21 +165,21 @@
     filter: alpha(opacity=20);
     opacity: .2;
   }
-  .v-select.single.searching:not(.open):not(.loading) input[type="search"] {
+  .v-select.theme-default.single.searching:not(.open):not(.loading) input[type="search"] {
     opacity: .2;
   }
   /* Search Input */
-  .v-select input[type="search"]::-webkit-search-decoration,
-  .v-select input[type="search"]::-webkit-search-cancel-button,
-  .v-select input[type="search"]::-webkit-search-results-button,
-  .v-select input[type="search"]::-webkit-search-results-decoration {
+  .v-select.theme-default input[type="search"]::-webkit-search-decoration,
+  .v-select.theme-default input[type="search"]::-webkit-search-cancel-button,
+  .v-select.theme-default input[type="search"]::-webkit-search-results-button,
+  .v-select.theme-default input[type="search"]::-webkit-search-results-decoration {
     display: none;
   }
-  .v-select input[type="search"]::-ms-clear {
+  .v-select.theme-default input[type="search"]::-ms-clear {
     display: none;
   }
-  .v-select input[type="search"],
-  .v-select input[type="search"]:focus {
+  .v-select.theme-default input[type="search"],
+  .v-select.theme-default input[type="search"]:focus {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -178,28 +200,25 @@
     clear: none;
   }
   /* Search Input States */
-  .v-select.unsearchable input[type="search"] {
+  .v-select.theme-default.unsearchable input[type="search"] {
     max-width: 1px;
   }
   /* List Items */
-  .v-select li {
+  .v-select.theme-default li {
     line-height: 1.42857143; /* Normalize line height */
   }
-  .v-select li > a {
+  .v-select.theme-default li > a {
     display: block;
     padding: 3px 20px;
     clear: both;
     color: #333; /* Overrides most CSS frameworks */
     white-space: nowrap;
   }
-  .v-select li:hover {
-    cursor: pointer;
-  }
-  .v-select .dropdown-menu .active > a {
+  .v-select.theme-default .dropdown-menu .active > a {
     color: #333;
     background: rgba(50, 50, 50, .1);
   }
-  .v-select .dropdown-menu > .highlight > a {
+  .v-select.theme-default .dropdown-menu > .highlight > a {
     /*
      * required to override bootstrap 3's
      * .dropdown-menu > li > a:hover {} styles
@@ -207,11 +226,11 @@
     background: #5897fb;
     color: #fff;
   }
-  .v-select .highlight:not(:last-child) {
+  .v-select.theme-default .highlight:not(:last-child) {
     margin-bottom: 0; /* Fixes Bulma Margin */
   }
   /* Loading Spinner */
-  .v-select .spinner {
+  .v-select.theme-default .spinner {
     opacity: 0;
     position: absolute;
     top: 5px;
@@ -227,14 +246,14 @@
     animation: vSelectSpinner 1.1s infinite linear;
     transition: opacity .1s;
   }
-  .v-select .spinner,
-  .v-select .spinner:after {
+  .v-select.theme-default .spinner,
+  .v-select.theme-default .spinner:after {
     border-radius: 50%;
     width: 5em;
     height: 5em;
   }
   /* Loading Spinner States */
-  .v-select.loading .spinner {
+  .v-select.theme-default.loading .spinner {
     opacity: 1;
   }
   /* KeyFrames */
@@ -254,19 +273,10 @@
       transform: rotate(360deg);
     }
   }
-  /* Dropdown Default Transition */
-  .fade-enter-active,
-  .fade-leave-active {
-    transition: opacity .15s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-  }
-  .fade-enter,
-  .fade-leave-to {
-    opacity: 0;
-  }
 </style>
 
 <template>
-  <div class="dropdown v-select" :class="dropdownClasses">
+  <div class="dropdown v-select" :class="[`theme-${theme}`, dropdownClasses]">
     <div ref="toggle" @mousedown.prevent="toggleDropdown" class="dropdown-toggle">
 
       <span class="selected-tag" v-for="option in valueAsArray" v-bind:key="option.index">
@@ -338,6 +348,19 @@
       tabIndex: {
         type: Number,
         default: -1
+      },
+
+      /**
+       * A string that define the component theme. If 'default',
+       * the css defined here will be applied, if it is another value,
+       * the component will be rendered with no style, and you
+       * need to make your own. A class theme-${theme} will be
+       * applied to the root element (.v-select).
+       * @type {Object}
+       */
+      theme: {
+        type: String,
+        default: 'default'
       },
 
       /**
