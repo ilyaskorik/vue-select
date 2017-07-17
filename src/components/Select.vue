@@ -304,7 +304,7 @@
               :readonly="!searchable"
               :style="{ width: isValueEmpty ? '100%' : 'auto' }"
               :id="inputId"
-              :tabindex="tabIndex"
+              :tabindex="tabindex"
               aria-label="Search for option"
       >
 
@@ -345,7 +345,7 @@
        * Handle Tabindex
        * @type {Number}
        */
-      tabIndex: {
+      tabindex: {
         type: Number,
         default: -1
       },
