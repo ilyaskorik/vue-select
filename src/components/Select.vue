@@ -305,44 +305,41 @@
 <template>
     <div class="dropdown v-select" :class="dropdownClasses">
         <div ref="toggle" @mousedown.prevent="toggleDropdown" class="dropdown-toggle">
-
-      <span class="selected-tag" v-for="option in valueAsArray" v-bind:key="option.index">
-        {{ getOptionLabel(option) }}
-        <button v-if="multiple" @click="deselect(option)" type="button" class="close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </span>
-
-            <input
-                    ref="search"
-                    v-model="search"
-                    @keydown.delete="maybeDeleteValue"
-                    @keyup.esc="onEscape"
-                    @keydown.up.prevent="typeAheadUp"
-                    @keydown.down.prevent="typeAheadDown"
-                    @keyup.enter.prevent="typeAheadSelect"
-                    @blur="onSearchBlur"
-                    @focus="onSearchFocus"
-                    type="search"
-                    class="form-control"
-                    :placeholder="searchPlaceholder"
-                    :readonly="!searchable"
-                    :style="{ width: isValueEmpty ? '100%' : 'auto' }"
-                    :id="inputId"
-            >
-
+            <span class="selected-tag" v-for="option in valueAsArray" v-bind:key="option.index">
+                <slot name="selected-option" v-bind="option">
+                    {{ getOptionLabel(option) }}
+                </slot>
+                <button v-if="multiple" @click="deselect(option)" type="button" class="close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </span>
+            <input ref="search"
+                   v-model="search"
+                   @keydown.delete="maybeDeleteValue"
+                   @keyup.esc="onEscape"
+                   @keydown.up.prevent="typeAheadUp"
+                   @keydown.down.prevent="typeAheadDown"
+                   @keyup.enter.prevent="typeAheadSelect"
+                   @blur="onSearchBlur"
+                   @focus="onSearchFocus"
+                   type="search"
+                   class="form-control"
+                   :placeholder="searchPlaceholder"
+                   :readonly="!searchable"
+                   :style="{ width: isValueEmpty ? '100%' : 'auto' }"
+                   :id="inputId">
             <i v-if="!noDrop" ref="openIndicator" role="presentation" class="open-indicator"></i>
-
             <slot name="spinner">
                 <div class="spinner" v-show="mutableLoading">Loading...</div>
             </slot>
         </div>
-
         <transition :name="transition">
             <ul ref="dropdownMenu" v-if="dropdownOpen" class="dropdown-menu" :style="{ 'max-height': maxHeight }">
                 <li v-for="(option, index) in filteredOptions" v-bind:key="index" :class="{ active: isOptionSelected(option), highlight: index === typeAheadPointer }" @mouseover="typeAheadPointer = index">
                     <a @mousedown.prevent="select(option)">
-                        {{ getOptionLabel(option) }}
+                        <slot name="option" v-bind="option">
+                            {{ getOptionLabel(option) }}
+                        </slot>
                     </a>
                 </li>
                 <li v-if="!filteredOptions.length" class="no-options">
