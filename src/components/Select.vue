@@ -326,7 +326,7 @@
                    class="form-control"
                    :placeholder="searchPlaceholder"
                    :readonly="!searchable"
-                   :style="{ width: isValueEmpty ? '100%' : 'auto' }"
+                   :style="{ width: isValueEmpty ? '100%' : isTaggable ? 'auto' : '100%' }"
                    :id="inputId">
             <i v-if="!noDrop" ref="openIndicator" role="presentation" class="open-indicator"></i>
             <slot name="spinner">
@@ -407,6 +407,15 @@
              * @type {Boolean}
              */
             filterable: {
+                type: Boolean,
+                default: false
+            },
+
+            /**
+             * Enable/disable filtering the options.
+             * @type {Boolean}
+             */
+            taggable: {
                 type: Boolean,
                 default: false
             },
@@ -922,6 +931,10 @@
                 }
 
                 return true;
+            },
+
+            isTaggable() {
+                return this.taggable
             },
 
             /**
